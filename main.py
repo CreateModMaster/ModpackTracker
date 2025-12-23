@@ -2,7 +2,12 @@ import json
 import os
 nextDict = {}
 packName = input("Enter pack name: ")
-packFileRead = open(packName + ".json", "r")
+try:
+    packFileRead = open(packName + ".json", "r")
+except FileNotFoundError:
+    packFileRead = open(packName + ".json", "w")
+    packFileRead.close()
+    packFileRead = open(packName + ".json", "r")
 currentDict = {
     "modsDir":[],
     "mods":[],
