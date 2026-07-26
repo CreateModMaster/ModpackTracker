@@ -1,5 +1,7 @@
 import json
 import os
+import subprocess
+import psutil
 
 if not os.path.isfile(os.getcwd() + "\\pythonTracker.json"):  #Checks to see if a history file already exists
     with open(os.getcwd() + "\\pythonTracker.json", "r") as JsonFileRead:  #Opens the modpack history file
@@ -65,5 +67,13 @@ else:
                         for i in range(len(changedModsAction)):
                             if changedModsAction[i] == "++":
                                 os.rename(os.getcwd() + "\\mods\\" + changedModsName[i], os.getcwd() + "\\mods\\" + changedModsName[i] + ".disabled")
+                                ListPath = os.getcwd().split("\\")
+                                CurrentUser = ListPath[2]
+                                CurrentInstance = ListPath[-2]
+                                PrismPath = "C:\\Users\\" + CurrentUser + "\\AppData\\Local\\Programs\\PrismLauncher\\prismlauncher.exe"
+                                proc = subprocess.Popen([PrismPath,"--launch",CurrentInstance])
+                                for JProc in psutil.process_iter(["pid","name","cmdline"]):
+                                    
+
                                 # Get the path to the prism launcher executable and then use "prismlauncher.exe --launch <instance>"
 
