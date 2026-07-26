@@ -4,27 +4,22 @@ import subprocess
 import psutil
 
 if not os.path.isfile(os.getcwd() + "\\pythonTracker.json"):  #Checks to see if a history file already exists
-    with open(os.getcwd() + "\\pythonTracker.json", "r") as JsonFileRead:  #Opens the modpack history file
-        with open(os.getcwd() + "\\pythonTracker.json", "w") as JsonFileWrite:
-            changedModsName = []  #Creates a new list to save the name of any added/deleted mods since last run
-            changedModsAction = []  #Creates a new list to save whether a mod file added or deleted since last run
-            oldJsonDict = json.load(JsonFileRead)  #Converts history file to a python dictionary
-            oldModsList = oldJsonDict["mods"]  #Saves the last known mods to a list
+    with open(os.getcwd() + "\\pythonTracker.json", "w") as JsonFileWrite:  #Opens the modpack history file
             newModsList = os.listdir(os.getcwd() + "\\mods")  #Creates a list of all the current mods
             newJsonDict = {
                 "mods":newModsList,
             }
             json.dump(newJsonDict,JsonFileWrite)
-            JsonFileRead.close()
             JsonFileWrite.close()
 
 
 else:
     with open(os.getcwd() + "\\pythonTracker.json", "r") as JsonFileRead:  #Opens the modpack history file
-        with open(os.getcwd() + "\\pythonTracker.json", "w") as JsonFileWrite:
-            if os.path.exists(os.getcwd() + "\\crash-reports"):  # Checks to see if there is a new crash report
-                with open(os.getcwd() + "\\crash-reports" + os.listdir(os.getcwd() + "\\crash-reports")[0]) as CrashFile:
-                    oldJsonDict = json.load(JsonFileRead)  # Converts history file to a python dictionary
+        if os.path.exists(os.getcwd() + "\\crash-reports"):  # Checks to see if there is a new crash report
+            with open(os.getcwd() + "\\crash-reports\\" + os.listdir(os.getcwd() + "\\crash-reports")[0]) as CrashFile:
+                oldFileContents = JsonFileRead.read()
+                oldJsonDict = json.loads(oldFileContents)  # Converts history file to a python dictionary
+                with open(os.getcwd() + "\\pythonTracker.json", "w") as JsonFileWrite:
                     oldModsList = oldJsonDict["mods"]
                     newModsList = os.listdir(os.getcwd() + "\\mods")
                     changedModsAction = []
@@ -52,9 +47,9 @@ else:
                     SelectedOption = input().lower()
                     removedMods = []
                     if SelectedOption == "a":
-                        for i in changedModsAction:
-                            if i == "++":
-                                os.remove(os.getcwd() + "\\mods\\" + changedModsName[i])
+                        for i in range(len(changedModsAction)):
+                            if changedModsAction[i] == "++":
+                                os.remove(os.getcwd() + "\\mods\\" + changedModsName[int(i)])
                                 changedModsAction.pop(i)
                                 removedMods.append(changedModsName.pop(i))
                         print(f"Successfully removed {len(removedMods)} mods:")
@@ -73,7 +68,10 @@ else:
                                 PrismPath = "C:\\Users\\" + CurrentUser + "\\AppData\\Local\\Programs\\PrismLauncher\\prismlauncher.exe"
                                 proc = subprocess.Popen([PrismPath,"--launch",CurrentInstance])
                                 for JProc in psutil.process_iter(["pid","name","cmdline"]):
-                                    
-
+                                    if JProc.info["name"] not in ("java.exe","javaw.exe"):
+                                        continue
+                                    if "--gameDir" in JProc.info["cmdline"]:
+                                        print(JProc.info["pid"])
                                 # Get the path to the prism launcher executable and then use "prismlauncher.exe --launch <instance>"
-
+                    JsonFileWrite.write(oldFileContents)
+                    JsonFileWrite.close()
