@@ -5,10 +5,10 @@
 ### It does the following things:
 * ### You place mods in your mods folder, check to see if Minecraft runs, if it does and the mods are compatible, then you run the program (select "add") and it will remember the mods in a list
 * ### Let's say you found two mods that don't work together, but Oh No! I added 50 mods all in one go and I don't know which two are causing the trouble. Just run the program (select "revert") and it will delete all the mods in your mods folder that were't previously added, letting you revert to a previous working state.
-### The program will ask you for two things:
-* ### The pack name, this is just the name that it will call the new file that it creates, which stores all the information about your mods, letting you use it for multiple instances, just by naming a not-already-created pack file.
-* ### The path to the directory where the mods are stored for your instance that you would like to track. (The mods folder for your selected instance)
+
+### The program contained in this branch is the newer version that is not completed yet and you may experience bugs if you try to run it. 
+
 ### NB This program requires Python to run. You can download python from here:
 ### https://www.python.org/downloads/
 
-### NB For those interested, the file named "inFolder.py" (in the branch labelled "V1.0") is a program that (when completed) will sit inside your minecraft instance and auto-detect when your instance runs and fails, and will update accordingly. Feel free to take a peek if you would like.
+### NB For those interested, the file named "inFolder.py" is a program that (when completed) will sit inside your minecraft instance and auto-detect when your instance runs and fails, and will update accordingly. Feel free to take a peek if you would like.
